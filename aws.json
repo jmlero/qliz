@@ -1,0 +1,88 @@
+{
+  "quiz_metadata": {
+    "title": "AWS Services Quiz",
+    "description": "Test your knowledge of Amazon Web Services",
+    "scoreboard_file": "aws_quiz_scoreboard.json",
+    "version": "1.0",
+    "time_per_question": 30,
+    "questions_per_game": 5
+  },
+  "questions": [
+    {
+      "id": 1,
+      "question": "What does S3 stand for?",
+      "options": [
+        "Simple Storage Service",
+        "Secure Storage Service",
+        "Standard Storage Service",
+        "Smart Storage Service"
+      ],
+      "correct_answer": 0,
+      "explanation": "S3 stands for Simple Storage Service, AWS's object storage service."
+    },
+    {
+      "id": 2,
+      "question": "Which AWS service is used for content delivery?",
+      "options": ["S3", "CloudFront", "Lambda", "EC2"],
+      "correct_answer": 1,
+      "explanation": "CloudFront is AWS's CDN service for content delivery."
+    },
+    {
+      "id": 3,
+      "question": "What is the main purpose of AWS Lambda?",
+      "options": [
+        "Data storage",
+        "Serverless computing",
+        "Load balancing",
+        "Database management"
+      ],
+      "correct_answer": 1,
+      "explanation": "Lambda provides serverless computing, allowing you to run code without managing servers."
+    },
+    {
+      "id": 4,
+      "question": "Which service provides managed NoSQL database?",
+      "options": ["RDS", "DynamoDB", "Redshift", "Aurora"],
+      "correct_answer": 1,
+      "explanation": "DynamoDB is AWS's fully managed NoSQL database service."
+    },
+    {
+      "id": 5,
+      "question": "What does IAM stand for?",
+      "options": [
+        "Internet Access Management",
+        "Identity and Access Management",
+        "Internal Application Management",
+        "Infrastructure Access Management"
+      ],
+      "correct_answer": 1,
+      "explanation": "IAM stands for Identity and Access Management, used for controlling access to AWS resources."
+    },
+    {
+      "id": 6,
+      "question": "Which AWS service provides virtual servers in the cloud?",
+      "options": ["Lambda", "EC2", "S3", "RDS"],
+      "correct_answer": 1,
+      "explanation": "EC2 (Elastic Compute Cloud) provides scalable virtual servers in the cloud."
+    },
+    {
+      "id": 7,
+      "question": "What is Amazon RDS used for?",
+      "options": [
+        "Object storage",
+        "Relational database management",
+        "Content delivery",
+        "Serverless functions"
+      ],
+      "correct_answer": 1,
+      "explanation": "RDS (Relational Database Service) makes it easy to set up, operate, and scale relational databases."
+    },
+    {
+      "id": 8,
+      "question": "Which service would you use for DNS management in AWS?",
+      "options": ["CloudFront", "Route 53", "VPC", "API Gateway"],
+      "correct_answer": 1,
+      "explanation": "Route 53 is AWS's scalable DNS and domain name registration service."
+    }
+  ]
+}

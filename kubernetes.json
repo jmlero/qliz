@@ -1,0 +1,194 @@
+{
+  "quiz_metadata": {
+    "title": "Kubernetes Challenge",
+    "description": "Kubernetes Challenge",
+    "scoreboard_file": "kubernetes_scoreboard.json",
+    "version": "1.0",
+    "time_per_question": 30,
+    "questions_per_game": 5
+  },
+  "questions": [
+    {
+      "id": 1,
+      "category": "CKA",
+      "question": "What command would you use to backup all etcd data in a Kubernetes cluster?",
+      "options": [
+        "kubectl backup etcd",
+        "etcdctl snapshot save /backup/etcd-snapshot.db",
+        "kubeadm backup etcd",
+        "etcd backup --all"
+      ],
+      "correct_answer": 1,
+      "explanation": "etcdctl snapshot save is the correct command to create an etcd backup. This is crucial for cluster disaster recovery."
+    },
+    {
+      "id": 2,
+      "category": "CKA",
+      "question": "Which component is responsible for maintaining the desired state of the cluster?",
+      "options": [
+        "kube-proxy",
+        "kubelet",
+        "kube-controller-manager",
+        "kube-scheduler"
+      ],
+      "correct_answer": 2,
+      "explanation": "The kube-controller-manager runs controllers that regulate the state of the cluster, ensuring the actual state matches the desired state."
+    },
+    {
+      "id": 3,
+      "category": "CKA",
+      "question": "How do you drain a node for maintenance while respecting PodDisruptionBudgets?",
+      "options": [
+        "kubectl delete node <node-name>",
+        "kubectl drain <node-name> --ignore-daemonsets",
+        "kubectl cordon <node-name>",
+        "kubectl evict <node-name>"
+      ],
+      "correct_answer": 1,
+      "explanation": "kubectl drain safely evicts pods from a node. --ignore-daemonsets is needed because DaemonSet pods cannot be evicted."
+    },
+    {
+      "id": 4,
+      "category": "CKA",
+      "question": "What is the default CNI plugin used by kubeadm?",
+      "options": [
+        "Flannel",
+        "Calico",
+        "None - must be installed separately",
+        "Weave Net"
+      ],
+      "correct_answer": 2,
+      "explanation": "kubeadm does not install a CNI plugin by default. You must install one separately (like Calico, Flannel, or Weave) for pod networking."
+    },
+    {
+      "id": 5,
+      "category": "CKA",
+      "question": "Which file contains the kubelet configuration on a node?",
+      "options": [
+        "/etc/kubernetes/kubelet.conf",
+        "/var/lib/kubelet/config.yaml",
+        "/etc/kubelet/config.yaml",
+        "/etc/kubernetes/manifests/kubelet.yaml"
+      ],
+      "correct_answer": 1,
+      "explanation": "The kubelet configuration is typically stored at /var/lib/kubelet/config.yaml, containing settings for the kubelet on that node."
+    },
+    {
+      "id": 6,
+      "category": "CKAD",
+      "question": "Which field in a Pod spec ensures containers restart only if they exit with an error?",
+      "options": [
+        "restartPolicy: Always",
+        "restartPolicy: OnFailure",
+        "restartPolicy: Never",
+        "restartPolicy: IfNotHealthy"
+      ],
+      "correct_answer": 1,
+      "explanation": "restartPolicy: OnFailure restarts containers only when they exit with a non-zero status code (failure)."
+    },
+    {
+      "id": 8,
+      "category": "CKAD",
+      "question": "How do you expose a Deployment named web-app on port 80 as a LoadBalancer service?",
+      "options": [
+        "kubectl expose deployment web-app --port=80 --type=LoadBalancer",
+        "kubectl create service web-app --port=80 --type=LoadBalancer",
+        "kubectl service expose web-app --port=80",
+        "kubectl lb create web-app --port=80"
+      ],
+      "correct_answer": 0,
+      "explanation": "kubectl expose deployment creates a Service for the deployment. --type=LoadBalancer creates a load balancer service."
+    },
+    {
+      "id": 9,
+      "category": "CKAD",
+      "question": "What is the purpose of a liveness probe?",
+      "options": [
+        "Check if the container is ready to accept traffic",
+        "Restart the container if it becomes unhealthy",
+        "Monitor container resource usage",
+        "Validate container image signature"
+      ],
+      "correct_answer": 1,
+      "explanation": "Liveness probes determine if a container is running properly. If it fails, Kubernetes restarts the container."
+    },
+    {
+      "id": 10,
+      "category": "CKAD",
+      "question": "Which command creates a Job that runs a pod with the image busybox executing 'echo hello'?",
+      "options": [
+        "kubectl run hello --image=busybox --restart=Never -- echo hello",
+        "kubectl create job hello --image=busybox -- echo hello",
+        "kubectl apply job hello --image=busybox --command='echo hello'",
+        "kubectl job create hello busybox echo hello"
+      ],
+      "correct_answer": 1,
+      "explanation": "kubectl create job is the correct imperative command to create a Job with a specific image and command."
+    },
+    {
+      "id": 11,
+      "category": "CKS",
+      "question": "What is the recommended way to scan container images for vulnerabilities before deployment?",
+      "options": [
+        "Use Admission Controllers to block deployment",
+        "Integrate image scanning tools like Trivy or Aqua in CI/CD pipeline",
+        "Enable PodSecurityPolicy to scan images",
+        "Use NetworkPolicy to prevent vulnerable images"
+      ],
+      "correct_answer": 1,
+      "explanation": "Image scanning should be integrated into the CI/CD pipeline using tools like Trivy, Aqua, or Clair to detect vulnerabilities before deployment to production."
+    },
+    {
+      "id": 12,
+      "category": "CKA",
+      "question": "What happens to Pod IP addresses when a Pod is rescheduled to a different node?",
+      "options": [
+        "The Pod retains its original IP address",
+        "The Pod gets a new IP from the same subnet",
+        "The Pod gets a completely new IP address from the cluster CIDR",
+        "The Pod uses the node's IP address"
+      ],
+      "correct_answer": 2,
+      "explanation": "Pods are ephemeral and receive a new IP address when rescheduled. This is why Services are used to provide stable network endpoints."
+    },
+    {
+      "id": 13,
+      "category": "CKS",
+      "question": "Which kubeadm command flag enables encryption of secrets at rest during cluster initialization?",
+      "options": [
+        "--encryption-provider-config",
+        "--enable-encryption",
+        "--secret-encryption-config",
+        "--config with EncryptionConfiguration"
+      ],
+      "correct_answer": 3,
+      "explanation": "Use kubeadm init --config with an EncryptionConfiguration file to enable encryption of secrets at rest in etcd."
+    },
+    {
+      "id": 14,
+      "category": "CKAD",
+      "question": "What is the correct way to implement a blue-green deployment strategy using kubectl?",
+      "options": [
+        "Create two Deployments and switch Service selector labels",
+        "Use kubectl rolling-update command",
+        "Set deployment strategy to RollingUpdate with maxSurge: 100%",
+        "Use DaemonSet with node selectors"
+      ],
+      "correct_answer": 0,
+      "explanation": "Blue-green deployment involves running two identical environments (blue and green) and switching traffic by updating the Service selector to point to the new Deployment."
+    },
+    {
+      "id": 15,
+      "category": "CKA",
+      "question": "How can you prevent a node from receiving new pods without affecting existing pods?",
+      "options": [
+        "kubectl drain <node> --ignore-daemonsets",
+        "kubectl taint nodes <node> key=value:NoSchedule",
+        "kubectl cordon <node>",
+        "kubectl delete node <node>"
+      ],
+      "correct_answer": 2,
+      "explanation": "kubectl cordon marks a node as unschedulable, preventing new pods from being scheduled while allowing existing pods to continue running. Drain would evict existing pods."
+    }
+  ]
+}
