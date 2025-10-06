@@ -1,88 +1,133 @@
 {
   "quiz_metadata": {
-    "title": "AWS Services Quiz",
-    "description": "Test your knowledge of Amazon Web Services",
+    "title": "AWS Challenge",
+    "description": "by SQUER",
     "scoreboard_file": "aws_quiz_scoreboard.json",
+    "stats_file": "aws_stats.json",
     "version": "1.0",
-    "time_per_question": 30,
+    "time_per_question": 40,
     "questions_per_game": 5
   },
   "questions": [
     {
       "id": 1,
-      "question": "What does S3 stand for?",
+      "question": "A company needs to ensure that data stored in S3 is automatically transitioned to lower-cost storage after 90 days and deleted after 365 days. Which solution meets these requirements?",
       "options": [
-        "Simple Storage Service",
-        "Secure Storage Service",
-        "Standard Storage Service",
-        "Smart Storage Service"
+        "Create an S3 Lifecycle policy with transition and expiration rules",
+        "Use CloudWatch Events to trigger Lambda functions for object management",
+        "Configure S3 Object Lock with retention periods",
+        "Implement AWS DataSync for automated data archival"
       ],
       "correct_answer": 0,
-      "explanation": "S3 stands for Simple Storage Service, AWS's object storage service."
+      "explanation": "S3 Lifecycle policies allow you to define rules for automatic transition between storage classes and expiration (deletion) of objects based on age."
     },
     {
       "id": 2,
-      "question": "Which AWS service is used for content delivery?",
-      "options": ["S3", "CloudFront", "Lambda", "EC2"],
+      "question": "An application running on EC2 instances needs to access DynamoDB tables. What is the most secure way to grant permissions?",
+      "options": [
+        "Store IAM user credentials in the application configuration file",
+        "Attach an IAM role to the EC2 instances with DynamoDB permissions",
+        "Use AWS Systems Manager Parameter Store to store credentials",
+        "Hard-code access keys in the application code"
+      ],
       "correct_answer": 1,
-      "explanation": "CloudFront is AWS's CDN service for content delivery."
+      "explanation": "IAM roles provide temporary credentials that are automatically rotated. Attaching a role to EC2 instances is the most secure method as it avoids storing long-term credentials."
     },
     {
       "id": 3,
-      "question": "What is the main purpose of AWS Lambda?",
+      "question": "A web application experiences unpredictable traffic spikes. Which combination of AWS services provides the most cost-effective auto-scaling solution?",
       "options": [
-        "Data storage",
-        "Serverless computing",
-        "Load balancing",
-        "Database management"
+        "Application Load Balancer + EC2 Auto Scaling + Target Tracking policy",
+        "Network Load Balancer + Reserved Instances + Manual scaling",
+        "Classic Load Balancer + Scheduled scaling policies",
+        "CloudFront + EC2 instances with fixed capacity"
       ],
-      "correct_answer": 1,
-      "explanation": "Lambda provides serverless computing, allowing you to run code without managing servers."
+      "correct_answer": 0,
+      "explanation": "An Application Load Balancer with EC2 Auto Scaling using target tracking policies automatically adjusts capacity based on actual demand, optimizing both performance and cost for unpredictable workloads."
     },
     {
       "id": 4,
-      "question": "Which service provides managed NoSQL database?",
-      "options": ["RDS", "DynamoDB", "Redshift", "Aurora"],
+      "question": "A Solutions Architect needs to design a highly available architecture across multiple Availability Zones. The RDS database must support automatic failover. Which option should be used?",
+      "options": [
+        "RDS with Read Replicas in different AZs",
+        "RDS Multi-AZ deployment",
+        "EC2 instances with database replication",
+        "DynamoDB Global Tables"
+      ],
       "correct_answer": 1,
-      "explanation": "DynamoDB is AWS's fully managed NoSQL database service."
+      "explanation": "RDS Multi-AZ automatically provisions and maintains a synchronous standby replica in a different AZ, providing automatic failover capability for high availability."
     },
     {
       "id": 5,
-      "question": "What does IAM stand for?",
+      "question": "A company wants to restrict access to S3 buckets only from their VPC. Which feature should be implemented?",
       "options": [
-        "Internet Access Management",
-        "Identity and Access Management",
-        "Internal Application Management",
-        "Infrastructure Access Management"
+        "S3 Bucket Policies with IP address conditions",
+        "VPC Endpoints for S3",
+        "AWS PrivateLink",
+        "Security Groups attached to S3 buckets"
       ],
       "correct_answer": 1,
-      "explanation": "IAM stands for Identity and Access Management, used for controlling access to AWS resources."
+      "explanation": "VPC Endpoints for S3 allow you to privately connect your VPC to S3 without using an internet gateway, and you can use bucket policies to restrict access to specific VPC endpoints."
     },
     {
       "id": 6,
-      "question": "Which AWS service provides virtual servers in the cloud?",
-      "options": ["Lambda", "EC2", "S3", "RDS"],
-      "correct_answer": 1,
-      "explanation": "EC2 (Elastic Compute Cloud) provides scalable virtual servers in the cloud."
+      "question": "An application requires a shared file system accessible from multiple EC2 instances across different AZs with NFS protocol support. Which service should be used?",
+      "options": [
+        "Amazon S3",
+        "Amazon EBS with Multi-Attach",
+        "Amazon EFS",
+        "Amazon FSx for Windows File Server"
+      ],
+      "correct_answer": 2,
+      "explanation": "Amazon EFS (Elastic File System) provides a scalable, shared file system using NFS protocol that can be mounted by multiple EC2 instances across different Availability Zones simultaneously."
     },
     {
       "id": 7,
-      "question": "What is Amazon RDS used for?",
+      "question": "A company needs to analyze application logs stored in S3 using SQL queries without setting up infrastructure. Which service combination is most appropriate?",
       "options": [
-        "Object storage",
-        "Relational database management",
-        "Content delivery",
-        "Serverless functions"
+        "Amazon EMR + Apache Spark",
+        "Amazon Athena + AWS Glue Data Catalog",
+        "Amazon Redshift + COPY command",
+        "EC2 instances running MySQL"
       ],
       "correct_answer": 1,
-      "explanation": "RDS (Relational Database Service) makes it easy to set up, operate, and scale relational databases."
+      "explanation": "Amazon Athena is a serverless query service that allows you to analyze data in S3 using standard SQL. AWS Glue Data Catalog provides metadata management, making this a fully managed, infrastructure-free solution."
     },
     {
       "id": 8,
-      "question": "Which service would you use for DNS management in AWS?",
-      "options": ["CloudFront", "Route 53", "VPC", "API Gateway"],
+      "question": "An organization wants to implement disaster recovery with a Recovery Time Objective (RTO) of minutes and minimal data loss. Which DR strategy is most appropriate?",
+      "options": [
+        "Backup and Restore",
+        "Pilot Light",
+        "Warm Standby",
+        "Multi-Site Active-Active"
+      ],
+      "correct_answer": 2,
+      "explanation": "Warm Standby maintains a scaled-down but fully functional version of your environment in another region, allowing for recovery in minutes with minimal data loss, balancing RTO/RPO requirements with cost."
+    },
+    {
+      "id": 9,
+      "question": "A Solutions Architect needs to ensure that data in transit between an application and RDS database is encrypted. What must be configured?",
+      "options": [
+        "Enable RDS encryption at rest",
+        "Use SSL/TLS certificates to connect to the RDS instance",
+        "Enable VPC Flow Logs",
+        "Configure AWS KMS encryption keys"
+      ],
       "correct_answer": 1,
-      "explanation": "Route 53 is AWS's scalable DNS and domain name registration service."
+      "explanation": "To encrypt data in transit to RDS, you must use SSL/TLS connections. RDS supports SSL/TLS, and you can enforce encrypted connections using parameter groups and connecting with SSL certificates."
+    },
+    {
+      "id": 10,
+      "question": "A web application uses ALB to distribute traffic to EC2 instances. Some users report intermittent connection failures. CloudWatch metrics show healthy targets. What could be the cause?",
+      "options": [
+        "ALB security group is not allowing outbound traffic",
+        "Target instances' security group doesn't allow traffic from ALB security group",
+        "ALB is not in the same Availability Zone as the targets",
+        "Health check interval is too long"
+      ],
+      "correct_answer": 1,
+      "explanation": "Even if targets are healthy, if the target instances' security group doesn't allow inbound traffic from the ALB's security group on the application port, connections will fail. This is a common misconfiguration."
     }
   ]
 }

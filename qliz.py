@@ -17,6 +17,7 @@ class Player:
         self.score = 0
         self.total_time = 0
         self.timestamp = datetime.now().isoformat()
+        self.question_details = []  # Track each question's result
 
 class Qliz:
     def __init__(self, stdscr, config_file):
@@ -26,6 +27,7 @@ class Qliz:
         self.all_questions = []  # All available questions
         self.questions = []      # Selected questions for current game
         self.scoreboard_file = None  # Will be set from config
+        self.stats_file = None  # Will be set from config
 
         # Setup curses
         curses.curs_set(0)  # Hide cursor
@@ -53,11 +55,14 @@ class Qliz:
 
             # Set scoreboard file from config or use default
             self.scoreboard_file = self.quiz_metadata.get('scoreboard_file', 'scoreboard.json')
+            # Set stats file from config or use default
+            self.stats_file = self.quiz_metadata.get('stats_file', 'stats.json')
 
             # Load all available questions
             self.all_questions = []
             for q in questions_data:
                 self.all_questions.append({
+                    'id': q.get('id', 0),
                     'question': q['question'],
                     'options': q['options'],
                     'correct': q['correct_answer'],
@@ -173,6 +178,11 @@ class Qliz:
         prompt_y = h - 4
         prompt_text = ">>> PRESS ANY KEY TO START <<<"
         self.blink_text(prompt_y, (w - len(prompt_text)) // 2, prompt_text, color=2, times=2)
+
+        # Footer
+        footer_msg = "Made with ❤️  and sleepless nights by @jmlero"
+        self.center_text(h - 2, footer_msg, color=6)
+        self.stdscr.refresh()
 
         self.stdscr.getch()
 
@@ -361,7 +371,7 @@ class Qliz:
             current_y += 1
 
         # Instructions
-        instructions = "↑/↓: Navigate  |  ENTER: Select  |  A-Z/1-6: Quick Select"
+        instructions = "↑/↓: Navigate  |  ENTER: Select  |  A-Z/1-4: Quick Select"
         self.center_text(h - 2, instructions, color=2)
 
         self.stdscr.refresh()
@@ -450,7 +460,7 @@ class Qliz:
         self.center_text(h//2 + 7, spacebar_msg, color=2)
 
         # Footer
-        footer_msg = "Made with ❤️ and sleepless nights by @jmlero"
+        footer_msg = "Made with ❤️  and sleepless nights by @jmlero"
         self.center_text(h - 2, footer_msg, color=6)
 
         self.stdscr.refresh()
@@ -550,11 +560,14 @@ class Qliz:
 
             time_taken = time.time() - start_time
 
+            # Determine if the answer was correct
+            is_correct = False
             if answer is None:
                 # Timeout
                 total_time += time_per_question
                 self.show_result(False, question['options'][question['correct']], "")
             elif answer == question['correct']:
+                is_correct = True
                 correct_answers += 1
                 total_time += time_taken
                 self.show_result(True, question['options'][question['correct']], "")
@@ -562,11 +575,25 @@ class Qliz:
                 total_time += time_taken
                 self.show_result(False, question['options'][question['correct']], "")
 
+            # Record question details for statistics
+            question_detail = {
+                "question_id": question.get('id', 0),
+                "question_text": question['question'],
+                "options": question['options'],
+                "correct_answer": question['correct'],
+                "player_answer": answer,
+                "is_correct": is_correct,
+                "time_taken": time_taken,
+                "timed_out": answer is None
+            }
+            player.question_details.append(question_detail)
+
         player.score = correct_answers
         player.total_time = total_time
 
         self.show_game_over(player, total_questions)
         self.save_score(player)
+        self.save_game_stats(player)
 
     def show_game_over(self, player, total_questions):
         """Game over screen."""
@@ -598,11 +625,24 @@ class Qliz:
         # Check if high score
         scoreboard_data = self.load_scoreboard()
         scores = scoreboard_data.get('scores', [])
-        if scores:
+        is_high_score = False
+
+        if not scores:
+            # First player always gets high score
+            is_high_score = True
+        else:
             sorted_scores = sorted(scores, key=lambda x: (-x['score'], x['total_time']))
-            if player.score >= sorted_scores[0]['score']:
-                hs_text = "*** NEW HIGH SCORE! ***"
-                self.blink_text(box_y + 8, box_x + (box_width - len(hs_text)) // 2, hs_text, color=2, times=3)
+            best_score = sorted_scores[0]
+
+            # New high score if: better score OR (same score AND faster time)
+            if player.score > best_score['score']:
+                is_high_score = True
+            elif player.score == best_score['score'] and player.total_time < best_score['total_time']:
+                is_high_score = True
+
+        if is_high_score:
+            hs_text = "*** NEW HIGH SCORE! ***"
+            self.blink_text(box_y + 8, box_x + (box_width - len(hs_text)) // 2, hs_text, color=2, times=3)
 
         self.center_text(h - 3, "Press any key to continue...", color=6)
         self.stdscr.refresh()
@@ -648,6 +688,33 @@ class Qliz:
                 return data
         except FileNotFoundError:
             return {"scores": []}
+
+    def save_game_stats(self, player):
+        """Save detailed game statistics to stats file."""
+        stats_data = self.load_stats()
+
+        game_stats = {
+            "player_name": player.name,
+            "player_email": player.email,
+            "timestamp": player.timestamp,
+            "final_score": player.score,
+            "total_time": player.total_time,
+            "total_questions": len(self.questions),
+            "questions": player.question_details
+        }
+
+        stats_data.append(game_stats)
+
+        with open(self.stats_file, 'w') as f:
+            json.dump(stats_data, f, indent=2)
+
+    def load_stats(self):
+        """Load statistics from file."""
+        try:
+            with open(self.stats_file, 'r') as f:
+                return json.load(f)
+        except FileNotFoundError:
+            return []
 
     def display_top5_with_emails(self):
         """Display top 5 players with email addresses."""
@@ -813,7 +880,11 @@ class Qliz:
 
             # Instructions
             instructions = "↑/↓: Navigate  |  ENTER: Select  |  Q: Quit"
-            self.center_text(h - 2, instructions, color=2)
+            self.center_text(h - 3, instructions, color=2)
+
+            # Footer
+            footer_msg = "Made with ❤️  and sleepless nights by @jmlero"
+            self.center_text(h - 2, footer_msg, color=6)
 
             self.stdscr.refresh()
 

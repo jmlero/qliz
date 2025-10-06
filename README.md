@@ -9,9 +9,10 @@ An interactive terminal-based quiz game in the terminal.
 ## Quick Start
 
 1. Run the quiz:
-   ```bash
-   ./qliz.py kubernetes.json
-   ```
+   
+```bash
+./qliz.py kubernetes.json
+```
 
 ## Running Different Quizzes
 

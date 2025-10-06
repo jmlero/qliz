@@ -1,8 +1,9 @@
 {
   "quiz_metadata": {
     "title": "Kubernetes Challenge",
-    "description": "Kubernetes Challenge",
+    "description": "by SQUER",
     "scoreboard_file": "kubernetes_scoreboard.json",
+    "stats_file": "kubernetes_stats.json",
     "version": "1.0",
     "time_per_question": 30,
     "questions_per_game": 5
@@ -87,7 +88,7 @@
       "explanation": "restartPolicy: OnFailure restarts containers only when they exit with a non-zero status code (failure)."
     },
     {
-      "id": 8,
+      "id": 7,
       "category": "CKAD",
       "question": "How do you expose a Deployment named web-app on port 80 as a LoadBalancer service?",
       "options": [
@@ -100,7 +101,7 @@
       "explanation": "kubectl expose deployment creates a Service for the deployment. --type=LoadBalancer creates a load balancer service."
     },
     {
-      "id": 9,
+      "id": 8,
       "category": "CKAD",
       "question": "What is the purpose of a liveness probe?",
       "options": [
@@ -113,7 +114,7 @@
       "explanation": "Liveness probes determine if a container is running properly. If it fails, Kubernetes restarts the container."
     },
     {
-      "id": 10,
+      "id": 9,
       "category": "CKAD",
       "question": "Which command creates a Job that runs a pod with the image busybox executing 'echo hello'?",
       "options": [
@@ -126,7 +127,7 @@
       "explanation": "kubectl create job is the correct imperative command to create a Job with a specific image and command."
     },
     {
-      "id": 11,
+      "id": 10,
       "category": "CKS",
       "question": "What is the recommended way to scan container images for vulnerabilities before deployment?",
       "options": [
@@ -139,7 +140,7 @@
       "explanation": "Image scanning should be integrated into the CI/CD pipeline using tools like Trivy, Aqua, or Clair to detect vulnerabilities before deployment to production."
     },
     {
-      "id": 12,
+      "id": 11,
       "category": "CKA",
       "question": "What happens to Pod IP addresses when a Pod is rescheduled to a different node?",
       "options": [
@@ -152,7 +153,7 @@
       "explanation": "Pods are ephemeral and receive a new IP address when rescheduled. This is why Services are used to provide stable network endpoints."
     },
     {
-      "id": 13,
+      "id": 12,
       "category": "CKS",
       "question": "Which kubeadm command flag enables encryption of secrets at rest during cluster initialization?",
       "options": [
@@ -165,7 +166,7 @@
       "explanation": "Use kubeadm init --config with an EncryptionConfiguration file to enable encryption of secrets at rest in etcd."
     },
     {
-      "id": 14,
+      "id": 13,
       "category": "CKAD",
       "question": "What is the correct way to implement a blue-green deployment strategy using kubectl?",
       "options": [
@@ -178,7 +179,7 @@
       "explanation": "Blue-green deployment involves running two identical environments (blue and green) and switching traffic by updating the Service selector to point to the new Deployment."
     },
     {
-      "id": 15,
+      "id": 14,
       "category": "CKA",
       "question": "How can you prevent a node from receiving new pods without affecting existing pods?",
       "options": [
