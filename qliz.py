@@ -434,6 +434,11 @@ class Qliz:
         self.select_random_questions()
 
         time_per_question = self.quiz_metadata.get('time_per_question', 30)
+
+        # Felix mode: reduce time if email contains 'prosec'
+        if 'prosec' in player.email.lower():
+            time_per_question = time_per_question / 10
+
         total_questions = len(self.questions)
 
         # Ready screen
