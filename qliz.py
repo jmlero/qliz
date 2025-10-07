@@ -841,9 +841,69 @@ class Qliz:
         self.stdscr.refresh()
         self.stdscr.getch()
 
+    def random_player_picker(self):
+        """Display total players and randomly pick one showing name and email."""
+        self.stdscr.clear()
+        h, w = self.stdscr.getmaxyx()
+
+        scoreboard_data = self.load_scoreboard()
+        scores = scoreboard_data.get('scores', [])
+        quiz_title = scoreboard_data.get('quiz_title', 'Quiz')
+
+        # Title
+        title1 = "╦═╗╔═╗╔╗╔╔╦╗╔═╗╔╦╗  ╔═╗╦╔═╗╦╔═╔═╗╦═╗"
+        title2 = "╠╦╝╠═╣║║║ ║║║ ║║║║  ╠═╝║║  ╠╩╗║╣ ╠╦╝"
+        title3 = "╩╚═╩ ╩╝╚╝═╩╝╚═╝╩ ╩  ╩  ╩╚═╝╩ ╩╚═╝╩╚═"
+
+        self.center_text(2, title1, color=2)
+        self.center_text(3, title2, color=2)
+        self.center_text(4, title3, color=2)
+
+        # Show quiz title
+        self.center_text(6, quiz_title, color=1)
+
+        if not scores:
+            self.center_text(h//2, "NO PLAYERS YET - BE THE FIRST!", color=5)
+        else:
+            # Count total players
+            total_players = len(scores)
+
+            # Randomly select one player
+            selected_player = random.choice(scores)
+
+            # Display box
+            box_width = min(70, w - 10)
+            box_height = 10
+            box_x = (w - box_width) // 2
+            box_y = (h - box_height) // 2
+
+            self.draw_box(box_y, box_x, box_height, box_width, "LUCKY WINNER", color=3)
+
+            # Total players
+            total_text = f"TOTAL PLAYERS: {total_players}"
+            self.stdscr.addstr(box_y + 2, box_x + (box_width - len(total_text)) // 2,
+                             total_text, curses.color_pair(2) | curses.A_BOLD)
+
+            # Separator
+            separator = "─" * (box_width - 6)
+            self.stdscr.addstr(box_y + 4, box_x + 3, separator, curses.color_pair(1))
+
+            # Selected player info
+            name_text = f"NAME: {selected_player['name']}"
+            email_text = f"EMAIL: {selected_player.get('email', 'N/A')}"
+
+            self.stdscr.addstr(box_y + 6, box_x + 5, name_text,
+                             curses.color_pair(4) | curses.A_BOLD)
+            self.stdscr.addstr(box_y + 7, box_x + 5, email_text,
+                             curses.color_pair(6))
+
+        self.center_text(h - 2, "Press any key to return...", color=6)
+        self.stdscr.refresh()
+        self.stdscr.getch()
+
     def main_menu(self):
         """Main menu with branding from config."""
-        menu_options = ["PLAY GAME", "HIGH SCORES", "TOP 5 PLAYERS", "EXIT"]
+        menu_options = ["PLAY GAME", "HIGH SCORES", "TOP 5 PLAYERS", "RANDOM PLAYER", "EXIT"]
         selected = 0
 
         while True:
@@ -903,7 +963,9 @@ class Qliz:
                     self.display_scoreboard()
                 elif selected == 2:  # Top 5 players
                     self.display_top5_with_emails()
-                elif selected == 3:  # Exit
+                elif selected == 3:  # Random player
+                    self.random_player_picker()
+                elif selected == 4:  # Exit
                     break
             elif key in [ord('q'), ord('Q')]:
                 break
